@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="24" viewBox="0 0 360 24">
+    <g fill="none" fill-rule="evenodd">
+        <path fill="#000" d="M0 0h360v24H0z" opacity=".083"/>
+        <text fill="#FFF" font-family="Roboto-Medium, Roboto" font-size="14" font-weight="400" opacity=".9" transform="translate(316 4)">
+            <tspan x=".419" y="15">12:30</tspan>
+        </text>
+        <path d="M297 4h16v16h-16z"/>
+        <path fill="#FFF" d="M306 5.875V5h-3v.875h-3V19h9V5.875z"/>
+        <path d="M277 4h16v16h-16z"/>
+        <path fill="#FFF" d="M277 19h14V5z"/>
+        <g>
+            <path d="M258 4h16v16h-16z"/>
+            <path fill="#FFF" d="M256.977 8.016A14.934 14.934 0 0 1 266 5c3.387 0 6.512 1.123 9.023 3.016L266 19l-9.023-10.984z"/>
+        </g>
+    </g>
+</svg>

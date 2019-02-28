@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>IREMBO USSD 2.0</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="libs/ussd.css">
+        <link rel="stylesheet" href="libs/modal.css"/>
+        <link rel="stylesheet" href="libs/material-input.css"/>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    </head>
+    <body>
+
+        <div class="ussd-container">
+            <div class="screen">
+                <div class="status-bar">
+                    <img src="assets/status-bar.svg" alt="status">
+                </div>
+                <div class="logo-bar">
+                    <img src="assets/logo.svg" alt="status">
+                </div>
+                <div class="content-bar">
+                    <div><img src="assets/more.svg" alt="status"></div>
+                    <div id="content" class="content"></div>  
+                    <div  id="delete"><img src="assets/delete.svg" alt="status"></div>
+                </div>
+            </div>
+            <div class="pad">
+                <div class="numeric-pad">  
+                    <div id="1" class="item">1</div>
+                    <div id="2" class="item">2<span class="item-subtitle">ABC</span></div>  
+                    <div id="3" class="item">3<span class="item-subtitle">DEF</span></div>
+                    <div id="4" class="item">4<span class="item-subtitle">GHI</span></div>
+                    <div id="5" class="item">5<span class="item-subtitle">JKL</span></div>
+                    <div id="6" class="item">6<span class="item-subtitle">MNO</span></div>
+                    <div id="7" class="item">7<span class="item-subtitle">PQRS</span></div>
+                    <div id="8" class="item">8<span class="item-subtitle">TUV</span></div>
+                    <div id="9" class="item">9<span class="item-subtitle">WXWZ</span></div>
+                    <div id="star" class="item">*</div>
+                    <div id="0" class="item">0<span class="item-subtitle">+</span></div>
+                    <div id="hash" class="item">#</div>
+                </div>
+                <div class="dial-button modal-trigger">
+                    <img src="assets/button.svg" alt="status">
+                </div>
+            </div>
+
+            <!-- modal - must sit outside main page layout -->
+            <div class="flex align-center modal modal--align">
+                <div class="modal__container">
+                    <p id="ussdResponseMessage"></p>   
+                    <div class="input-wrapper">
+                        <div class="group">      
+                            <input id="input" type="text">
+                            <span class="bar"></span>
+                        </div>
+                    </div>   
+                    <div class="buttons-wrapper">
+                        <div id="cancelUssdRequest" class="btn modal__close">Cancel</div>&nbsp;&nbsp;
+                        <div id="sendUssdRequest" class="btn send">Send</div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- / modal -->
+
+        </div>
+
+
+        <script type="text/javascript" src="libs/jquery.min.js"></script>
+        <script type="text/javascript" src="libs/modal.js"></script>
+    </body>
+</html>
+
