@@ -4,12 +4,30 @@ $(document).ready(function () {
     var EMPTY = "";
     var NULL = null;
     var id = EMPTY;
-    var content = $("#content");
-    var input = $("#input");
     var USSD_URL = "http://localhost:8000/ussd/request";
     var USSD_METHOD = "GET";
 
-    $(".item").on("click", function (e) {
+
+    var content = $("#content");
+    var input = $("#input");
+    var sendBtn = $("#sendUssdRequest");
+    var cancelBtn = $("#cancelUssdRequest");
+    var okBtn = $("#okBtn");
+    var deleteBtn = $("#delete");
+    var items = $(".item");
+    var responseMessage = $("#ussdResponseMessage");
+
+    /**
+     * Hide Ok Button
+     */
+    okBtn.hide();
+
+    /**
+     * Handle the keypad dialing
+     * 
+     * @param {event} e 
+     */
+    items.on("click", function (e) {
         id = e.target.id;
         if (id === "star") {
             content.append("*");
@@ -20,7 +38,12 @@ $(document).ready(function () {
         }
     });
 
-    $("#delete").on("click", function (e) {
+    /**
+     * Delete dial number on keypad 
+     * 
+     * @param {event} e
+     */
+    deleteBtn.on("click", function (e) {
         e.preventDefault();
         var currentContent = $("#content").html();
         if (currentContent.length > 0) {
@@ -58,7 +81,7 @@ $(document).ready(function () {
 
         // Open the modal 
         trigger.onclick = function () {
-            var input = $("#content").html();
+            var input = content.html();
             if (input === "*909#") {
                 var newRequest = setNewRequest(input);
                 var sessionid = setSessionId();
@@ -106,6 +129,7 @@ $(document).ready(function () {
 
     /**
      * Send USSD Request to USSD Application
+     * 
      * @param data
      */
     function sendUssdRequest(data) {
@@ -123,6 +147,7 @@ $(document).ready(function () {
                     setUssdMessage(result);
                     clearLocalstorage();
                     clearInput();
+                    showOkBtn(true);
                     input.prop('disabled', true);
                     clearUssdSession();
                 } else {
@@ -137,9 +162,9 @@ $(document).ready(function () {
         });
     }
 
-
     /**
      * Generation Dummy Ussd session
+     * 
      * @returns {string}
      */
     function setSessionId() {
@@ -159,7 +184,7 @@ $(document).ready(function () {
     /**
      * Set newRequest:
      *  1 = begin ussd navigation
-     *  2 = continue ussd navigation
+     *  0 = continue ussd navigation
      *
      * @param ussdInput
      * @returns {string}
@@ -204,25 +229,29 @@ $(document).ready(function () {
     function clearInput() {
         input.val(EMPTY);
     }
+
     /**
      * clear ussd message textarea field
      */
     function clearUssdMessage() {
-        $("#ussdResponseMessage").html(EMPTY);
+        responseMessage.html(EMPTY);
     }
 
     /**
      * update ussd message textarea field with new message
+     * 
+     * @param {string} message 
      */
     function setUssdMessage(message) {
         clearUssdMessage();
-        $("#ussdResponseMessage").html(message.replace(/\n/g, "<br />"));
+        responseMessage.html(message.replace(/\n/g, "<br />"));
     }
 
     /**
      * reset ussd simulator by cleaning local storage, forms and reloading page
      */
     function resetUssdSimulator() {
+        showOkBtn(false);
         clearUssdMessage();
         clearInput();
         clearLocalstorage();
@@ -230,8 +259,10 @@ $(document).ready(function () {
 
     /**
      * Call ussd application by sending ussd necessary inputs.
+     * 
+     * @param {event} e 
      */
-    $("#sendUssdRequest").on("click", function (e) {
+    sendBtn.on("click", function (e) {
         e.preventDefault();
         var newRequest = setNewRequest(input.val());
         var sessionid = setSessionId();
@@ -241,8 +272,8 @@ $(document).ready(function () {
             newRequest: String(newRequest),
             input: String(input.val()),
             msisdn: "250784070610"
-        }
-        if (input.val() == EMPTY) {
+        };
+        if (input.val() === EMPTY) {
             alert("Cannot submit empty field");
         } else {
             sendUssdRequest(data);
@@ -251,11 +282,41 @@ $(document).ready(function () {
 
     /**
      * onClick Cancel button reset ussd simulator
+     * 
+     * @param {event} e 
      */
-    $("#cancelUssdRequest").on("click", function (e) {
+    cancelBtn.on("click", function (e) {
         e.preventDefault();
         input.prop('disabled', false);
         resetUssdSimulator();
     });
 
+    /**
+     * onClick ok bottun reset ussd simulator
+     * 
+     * @param {event} e 
+     */
+    okBtn.on("click", function (e) {
+        e.preventDefault();
+        input.prop('disabled', false);
+        resetUssdSimulator();
+    });
+
+    /**
+     * Toggle OkBtn
+     * 
+     * @param {type} ok
+     * @returns {undefined}
+     */
+    function showOkBtn(ok) {
+        if (ok === true) {
+            sendBtn.hide();
+            cancelBtn.hide();
+            okBtn.show();
+        } else {
+            sendBtn.show();
+            cancelBtn.show();
+            okBtn.hide();
+        }
+    }
 });
