@@ -74,7 +74,7 @@ $(document).ready(function () {
             } else if (input.length === 0) {
                 alert("Dial short code *909#");
             } else {
-                alert("Only shortcode *909# is allowed");
+                alert("UNKNOWN APPLICATION");
             }
         };
 
@@ -254,6 +254,7 @@ $(document).ready(function () {
      */
     $("#cancelUssdRequest").on("click", function (e) {
         e.preventDefault();
+        input.prop('disabled', false);
         resetUssdSimulator();
     });
 
