@@ -3,11 +3,11 @@ This USSD simulator was build to be compatible with Comviva USSD Gateway.
 
 ## Installation
 - clone the repo
-- edit the variable 'USSD_URL' in libs/modal.js to match your backend application url.
+- edit the variable 'USSD_URL' in *modal.js* to match your backend application url.
 
 ## Backend requirements
 
-In-order to manage USSD session (*Closing/Opening*), you have to set HTTP-HEADER 'Freeflow'
+In-order to manage USSD session (*Closing/Opening*), you have to set http header `Freeflow` as follow
 
 ```
 Freeflow: FC => Continue USSD session
