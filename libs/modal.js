@@ -82,7 +82,7 @@ $(document).ready(function () {
         // Open the modal 
         trigger.onclick = function () {
             var input = content.html();
-            if (input === "*909#") {
+            if (input === "*123#") {
                 var newRequest = setNewRequest(input);
                 var sessionid = setSessionId();
                 var data = {
@@ -95,7 +95,7 @@ $(document).ready(function () {
                 sendUssdRequest(data);
                 modal.classList.add('modal--show');
             } else if (input.length === 0) {
-                alert("Dial short code *909#");
+                alert("Dial short code *123#");
             } else {
                 alert("UNKNOWN APPLICATION");
             }
