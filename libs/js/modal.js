@@ -90,10 +90,15 @@ $(document).ready(function () {
                     sessionid: String(sessionid),
                     newRequest: newRequest,
                     input: input,
-                    msisdn: "250784070610"
+                    msisdn: "250788313531"
                 };
-                sendUssdRequest(data);
-                modal.classList.add('modal--show');
+                if(fileExists(USSD_URL, data) === true){
+                    sendUssdRequest(data);
+                    modal.classList.add('modal--show');
+                } else {
+                    alert("External Application Down");
+                }
+
             } else if (input.length === 0) {
                 alert("Dial short code *123#");
             } else {
@@ -133,33 +138,34 @@ $(document).ready(function () {
      * @param data
      */
     function sendUssdRequest(data) {
-        $.ajax({
-            type: USSD_METHOD,
-            url: USSD_URL,
-            crossDomain: true,
-            data: data,
-            success: function (result, status, xhr) {
-                var Freeflow = xhr.getResponseHeader("Freeflow");
-                if (Freeflow === "FC") {
-                    clearInput();
-                    setUssdMessage(result);
-                } else if (Freeflow === "FB") {
-                    setUssdMessage(result);
-                    clearLocalstorage();
-                    clearInput();
-                    showOkBtn(true);
-                    input.prop('disabled', true);
-                    clearUssdSession();
-                } else {
-                    console.log(xhr);
-                    console.log(Freeflow);
-                    console.log("Some error occured");
+            $.ajax({
+                type: USSD_METHOD,
+                url: USSD_URL,
+                crossDomain: true,
+                data: data,
+                success: function (result, status, xhr) {
+                    var Freeflow = xhr.getResponseHeader("Freeflow");
+                    if (Freeflow === "FC") {
+                        clearInput();
+                        setUssdMessage(result);
+                    } else if (Freeflow === "FB") {
+                        setUssdMessage(result);
+                        clearLocalstorage();
+                        clearInput();
+                        showOkBtn(true);
+                        input.prop('disabled', true);
+                        clearUssdSession();
+                    } else {
+                        console.log(xhr);
+                        console.log(Freeflow);
+                        console.log("Some error occured");
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
                 }
-            },
-            error: function (e) {
-                console.log(e);
-            }
-        });
+            });
+
     }
 
     /**
@@ -318,5 +324,29 @@ $(document).ready(function () {
             cancelBtn.show();
             okBtn.hide();
         }
+    }
+
+    /**
+    * Check if URL exists
+    * 
+    * @param {type} url URL to be tested
+    * @return {boolean}
+    */
+    function fileExists(url,requestData) {
+        var exists = false;
+           $.ajax({
+                type: "HEAD",
+                url: url,
+                crossDomain: true,
+                data: requestData,
+                success: function (result, status, xhr) {
+                    if(status === 200){
+                        exists = true;   
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
     }
 });
