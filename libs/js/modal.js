@@ -47,8 +47,9 @@ $(document).ready(function () {
         e.preventDefault();
         var currentContent = $("#content").html();
         if (currentContent.length > 0) {
-            var deleted = currentContent.slice(0, -1);
-            content.html(deleted);
+            // var deleted = currentContent.slice(0, -1);
+            // content.html(deleted);
+            content.html("");
             console.log(deleted);
         }
     });
