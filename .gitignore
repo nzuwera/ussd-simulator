@@ -1,3 +1,6 @@
 ### NetBeans ###
 nbproject/
 .DS_Store
+
+### JetBrains ###
+.idea/

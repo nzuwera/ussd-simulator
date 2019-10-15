@@ -1,21 +1,20 @@
-
 $(document).ready(function () {
 
-    var EMPTY = "";
-    var NULL = null;
-    var id = EMPTY;
-    var USSD_URL = "http://localhost:8000/ussd/request";
-    var USSD_METHOD = "GET";
+    let EMPTY = "";
+    let NULL = null;
+    let id = EMPTY;
+    let APPLICATION_URL = "http://localhost:8000/ussd/request";
+    let HTTP_METHOD = "GET";
 
 
-    var content = $("#content");
-    var input = $("#input");
-    var sendBtn = $("#sendUssdRequest");
-    var cancelBtn = $("#cancelUssdRequest");
-    var okBtn = $("#okBtn");
-    var deleteBtn = $("#delete");
-    var items = $(".item");
-    var responseMessage = $("#ussdResponseMessage");
+    let content = $("#content");
+    let input = $("#input");
+    let sendBtn = $("#sendUssdRequest");
+    let cancelBtn = $("#cancelUssdRequest");
+    let okBtn = $("#okBtn");
+    let deleteBtn = $("#delete");
+    let items = $(".item");
+    let responseMessage = $("#ussdResponseMessage");
 
     /**
      * Hide Ok Button
@@ -24,8 +23,8 @@ $(document).ready(function () {
 
     /**
      * Handle the keypad dialing
-     * 
-     * @param {event} e 
+     *
+     * @param {event} e
      */
     items.on("click", function (e) {
         id = e.target.id;
@@ -39,68 +38,67 @@ $(document).ready(function () {
     });
 
     /**
-     * Delete dial number on keypad 
-     * 
+     * Delete dial number on keypad
+     *
      * @param {event} e
      */
     deleteBtn.on("click", function (e) {
         e.preventDefault();
-        var currentContent = $("#content").html();
-        if (currentContent.length > 0) {
-            // var deleted = currentContent.slice(0, -1);
+        //const currentContent = content.html();
+        if (content.html().length > 0) {
+            // let deleted = currentContent.slice(0, -1);
             // content.html(deleted);
             content.html("");
-            console.log(deleted);
+            // console.log(deleted);
         }
     });
 
     modal();
 
 
-
 // Modal - JS
     function modal() {
 
-        var modal = document.getElementsByClassName('modal')[0],
-                trigger = document.getElementsByClassName('modal-trigger')[0],
-                close = document.getElementsByClassName('modal__close'); // we loops this to catch the different closers
+        let modalClass = document.getElementsByClassName('modal')[0],
+            trigger = document.getElementsByClassName('modal-trigger')[0],
+            close = document.getElementsByClassName('modal__close'); // we loops this to catch the different closers
 
 
-        closeModal = function () {
-            modal.classList.remove('modal--show');
-            modal.classList.add('modal--hide');
+        let closeModal = function () {
+            modalClass.classList.remove('modal--show');
+            modalClass.classList.add('modal--hide');
             // Remove hide class after animation is done
-            afterAnimation = function () {
-                modal.classList.remove('modal--hide');
+            let afterAnimation = function () {
+                modalClass.classList.remove('modal--hide');
             };
             // This listens for the CSS animations to finish and then hides the modal
-            modal.addEventListener("webkitAnimationEnd", afterAnimation, false);
-            modal.addEventListener("oAnimationEnd", afterAnimation, false);
-            modal.addEventListener("msAnimationEnd", afterAnimation, false);
-            modal.addEventListener("animationend", afterAnimation, false);
+            modalClass.addEventListener("webkitAnimationEnd", afterAnimation, false);
+            modalClass.addEventListener("oAnimationEnd", afterAnimation, false);
+            modalClass.addEventListener("msAnimationEnd", afterAnimation, false);
+            modalClass.addEventListener("animationend", afterAnimation, false);
         };
 
         // Open the modal 
         trigger.onclick = function () {
-            var input = content.html();
-            if (input === "*123#") {
-                var newRequest = setNewRequest(input);
-                var sessionid = setSessionId();
-                var data = {
+            let userKeyboardInput = content.html();
+            if (userKeyboardInput === "*123#") {
+                let newRequest = setNewRequest(userKeyboardInput);
+                let sessionId = setSessionId();
+                let data = {
                     cellid: "3G2343",
-                    sessionid: String(sessionid),
+                    sessionid: String(sessionId),
                     newRequest: newRequest,
-                    input: input,
+                    input: userKeyboardInput,
                     msisdn: "250788313531"
                 };
-                if(fileExists(USSD_URL, data) === true){
+                if (fileExists(APPLICATION_URL, data) === true) {
                     sendUssdRequest(data);
-                    modal.classList.add('modal--show');
+                    modalClass.classList.add('modal--show');
                 } else {
                     alert("External Application Down");
                 }
 
-            } else if (input.length === 0) {
+            } else if (userKeyboardInput.length === 0) {
                 alert("Dial short code *123#");
             } else {
                 alert("UNKNOWN APPLICATION");
@@ -108,7 +106,7 @@ $(document).ready(function () {
         };
 
         // Close the modal with any element with class 'modal__close'
-        for (var i = 0; i < close.length; i++) {
+        for (let i = 0; i < close.length; i++) {
             close[i].onclick = function () {
                 closeModal();
             };
@@ -116,7 +114,7 @@ $(document).ready(function () {
 
         // Click outside of the modal and close it
         window.onclick = function (e) {
-            if (e.target === modal) {
+            if (e.target === modalClass) {
                 closeModal();
             }
         };
@@ -124,7 +122,7 @@ $(document).ready(function () {
         // Use the escape key to close modal
         document.onkeyup = function (e) {
             e = e || window.event;
-            if (modal.classList.contains('modal--show')) {
+            if (modalClass.classList.contains('modal--show')) {
                 if (e.keyCode === 27) {
                     closeModal();
                 }
@@ -135,50 +133,50 @@ $(document).ready(function () {
 
     /**
      * Send USSD Request to USSD Application
-     * 
+     *
      * @param data
      */
     function sendUssdRequest(data) {
-            $.ajax({
-                type: USSD_METHOD,
-                url: USSD_URL,
-                crossDomain: true,
-                data: data,
-                success: function (result, status, xhr) {
-                    var Freeflow = xhr.getResponseHeader("Freeflow");
-                    if (Freeflow === "FC") {
-                        clearInput();
-                        setUssdMessage(result);
-                    } else if (Freeflow === "FB") {
-                        setUssdMessage(result);
-                        clearLocalstorage();
-                        clearInput();
-                        showOkBtn(true);
-                        input.prop('disabled', true);
-                        clearUssdSession();
-                    } else {
-                        console.log(xhr);
-                        console.log(Freeflow);
-                        console.log("Some error occured");
-                    }
-                },
-                error: function (e) {
-                    console.log(e);
+        $.ajax({
+            type: HTTP_METHOD,
+            url: APPLICATION_URL,
+            crossDomain: true,
+            data: data,
+            success: function (result, status, xhr) {
+                let Freeflow = xhr.getResponseHeader("Freeflow");
+                if (Freeflow === "FC") {
+                    clearInput();
+                    setUssdMessage(result);
+                } else if (Freeflow === "FB") {
+                    setUssdMessage(result);
+                    clearLocalstorage();
+                    clearInput();
+                    showOkBtn(true);
+                    input.prop('disabled', true);
+                    clearUssdSession();
+                } else {
+                    console.log(xhr);
+                    console.log(Freeflow);
+                    console.log("Some error occured");
                 }
-            });
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
 
     }
 
     /**
      * Generation Dummy Ussd session
-     * 
+     *
      * @returns {string}
      */
     function setSessionId() {
-        var sessionid;
+        let sessionid;
         if (localStorage.getItem('sessionid') === NULL) {
-            var current_datetime = new Date();
-            var formated_datetime = current_datetime.getFullYear() + (current_datetime.getMonth() + 1) + current_datetime.getDate() + current_datetime.getHours() + current_datetime.getMinutes() + current_datetime.getSeconds();
+            let current_datetime = new Date();
+            let formated_datetime = current_datetime.getFullYear() + (current_datetime.getMonth() + 1) + current_datetime.getDate() + current_datetime.getHours() + current_datetime.getMinutes() + current_datetime.getSeconds();
             console.log("setSessionId::formated_datetime = " + formated_datetime);
             localStorage.setItem('sessionid', formated_datetime);
             sessionid = localStorage.getItem('sessionid');
@@ -193,14 +191,14 @@ $(document).ready(function () {
      *  1 = begin ussd navigation
      *  0 = continue ussd navigation
      *
-     * @param ussdInput
+     * @param userKeyboardInput
      * @returns {string}
      */
-    function setNewRequest(ussdInput) {
-        var newRequest = EMPTY;
+    function setNewRequest(userKeyboardInput) {
+        let newRequest;
         if (localStorage.getItem('newRequest') === NULL) {
-            var request = EMPTY;
-            if (ussdInput.endsWith("#") && ussdInput.startsWith("*")) {
+            let request;
+            if (userKeyboardInput.endsWith("#") && userKeyboardInput.startsWith("*")) {
                 request = "1";
             } else {
                 localStorage.removeItem("newRequest");
@@ -246,8 +244,8 @@ $(document).ready(function () {
 
     /**
      * update ussd message textarea field with new message
-     * 
-     * @param {string} message 
+     *
+     * @param {string} message
      */
     function setUssdMessage(message) {
         clearUssdMessage();
@@ -266,14 +264,14 @@ $(document).ready(function () {
 
     /**
      * Call ussd application by sending ussd necessary inputs.
-     * 
-     * @param {event} e 
+     *
+     * @param {event} e
      */
     sendBtn.on("click", function (e) {
         e.preventDefault();
-        var newRequest = setNewRequest(input.val());
-        var sessionid = setSessionId();
-        var data = {
+        let newRequest = setNewRequest(input.val());
+        let sessionid = setSessionId();
+        let data = {
             cellid: "3G2343",
             sessionid: String(sessionid),
             newRequest: String(newRequest),
@@ -289,8 +287,8 @@ $(document).ready(function () {
 
     /**
      * onClick Cancel button reset ussd simulator
-     * 
-     * @param {event} e 
+     *
+     * @param {event} e
      */
     cancelBtn.on("click", function (e) {
         e.preventDefault();
@@ -300,8 +298,8 @@ $(document).ready(function () {
 
     /**
      * onClick ok bottun reset ussd simulator
-     * 
-     * @param {event} e 
+     *
+     * @param {event} e
      */
     okBtn.on("click", function (e) {
         e.preventDefault();
@@ -311,7 +309,7 @@ $(document).ready(function () {
 
     /**
      * Toggle OkBtn
-     * 
+     *
      * @param {type} ok
      * @returns {undefined}
      */
@@ -328,26 +326,27 @@ $(document).ready(function () {
     }
 
     /**
-    * Check if URL exists
-    * 
-    * @param {type} url URL to be tested
-    * @return {boolean}
-    */
-    function fileExists(url,requestData) {
-        var exists = false;
-           $.ajax({
-                type: "HEAD",
-                url: url,
-                crossDomain: true,
-                data: requestData,
-                success: function (result, status, xhr) {
-                    if(status === 200){
-                        exists = true;   
-                    }
-                },
-                error: function (e) {
-                    console.log(e);
+     * Check if URL exists
+     *
+     * @param url link to be test
+     * @param requestData option data
+     */
+    function fileExists(url, requestData) {
+        let exists = false;
+        $.ajax({
+            type: "HEAD",
+            url: url,
+            crossDomain: true,
+            data: requestData,
+            success: function (result, status, xhr) {
+                if (status === 200) {
+                    exists = true;
+                    return exists;
                 }
-            });
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
     }
 });
