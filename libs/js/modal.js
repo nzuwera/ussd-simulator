@@ -3,10 +3,11 @@ $(document).ready(function () {
     let EMPTY = "";
     let NULL = null;
     let id = EMPTY;
-    let APPLICATION_URL = "http://localhost:8000/ussd/request";
+    let APPLICATION_URL = "http://localhost:8000/ussd/agrigo";
     let HTTP_METHOD = "GET";
 
 
+    let documentBody = $(document);
     let content = $("#content");
     let input = $("#input");
     let sendBtn = $("#sendUssdRequest");
@@ -15,6 +16,20 @@ $(document).ready(function () {
     let deleteBtn = $("#delete");
     let items = $(".item");
     let responseMessage = $("#ussdResponseMessage");
+
+    /**
+     * Handle KeyBoard navigation
+     */
+    documentBody.keypress(function (event) {
+        let keyCode = (event.keyCode ? event.keyCode : event.which);
+        if (keyCode === 8) {
+            content.empty();
+        } else if (keyCode === 13) {
+            showModal();
+        } else {
+            content.append(getKeyBoardInput(event.keyCode));
+        }
+    });
 
     /**
      * Hide Ok Button
@@ -80,29 +95,7 @@ $(document).ready(function () {
 
         // Open the modal 
         trigger.onclick = function () {
-            let userKeyboardInput = content.html();
-            if (userKeyboardInput === "*123#") {
-                let newRequest = setNewRequest(userKeyboardInput);
-                let sessionId = setSessionId();
-                let data = {
-                    cellid: "3G2343",
-                    sessionid: String(sessionId),
-                    newRequest: newRequest,
-                    input: userKeyboardInput,
-                    msisdn: "250788313531"
-                };
-                if (fileExists(APPLICATION_URL, data) === true) {
-                    sendUssdRequest(data);
-                    modalClass.classList.add('modal--show');
-                } else {
-                    alert("External Application Down");
-                }
-
-            } else if (userKeyboardInput.length === 0) {
-                alert("Dial short code *123#");
-            } else {
-                alert("UNKNOWN APPLICATION");
-            }
+            showModal();
         };
 
         // Close the modal with any element with class 'modal__close'
@@ -125,6 +118,8 @@ $(document).ready(function () {
             if (modalClass.classList.contains('modal--show')) {
                 if (e.keyCode === 27) {
                     closeModal();
+                } else {
+                    console.log(e.keyCode);
                 }
             }
         };
@@ -325,28 +320,80 @@ $(document).ready(function () {
         }
     }
 
+
     /**
-     * Check if URL exists
+     * Get KeyBoard pressed button input
      *
-     * @param url link to be test
-     * @param requestData option data
+     * @param keyCode keyCode
+     * @returns {string} pressed button
      */
-    function fileExists(url, requestData) {
-        let exists = false;
-        $.ajax({
-            type: "HEAD",
-            url: url,
-            crossDomain: true,
-            data: requestData,
-            success: function (result, status, xhr) {
-                if (status === 200) {
-                    exists = true;
-                    return exists;
-                }
-            },
-            error: function (e) {
-                console.log(e);
-            }
-        });
+    function getKeyBoardInput(keyCode) {
+        let keyValue = "";
+        switch (keyCode) {
+            case 48:
+                keyValue = "0";
+                break;
+            case 49:
+                keyValue = "1";
+                break;
+            case 50:
+                keyValue = "2";
+                break;
+            case 51:
+                keyValue = "3";
+                break;
+            case 52:
+                keyValue = "4";
+                break;
+            case 53:
+                keyValue = "5";
+                break;
+            case 54:
+                keyValue = "6";
+                break;
+            case 55:
+                keyValue = "7";
+                break;
+            case 56:
+                keyValue = "8";
+                break;
+            case 57:
+                keyValue = "9";
+                break;
+            case 42:
+                keyValue = "*";
+                break;
+            case 35:
+                keyValue = "#";
+                break;
+            default:
+                keyValue = null;
+                break;
+        }
+        return keyValue;
+    }
+
+    function showModal() {
+        // Open the modal
+        let modalClass = document.getElementsByClassName('modal')[0];
+        let userKeyboardInput = content.html();
+        if (userKeyboardInput === "*123#") {
+            let newRequest = setNewRequest(userKeyboardInput);
+            let sessionId = setSessionId();
+            let data = {
+                cellid: "3G2343",
+                sessionid: String(sessionId),
+                newRequest: newRequest,
+                input: userKeyboardInput,
+                msisdn: "250788313531"
+            };
+            sendUssdRequest(data);
+            modalClass.classList.add('modal--show');
+
+        } else if (userKeyboardInput.length === 0) {
+            alert("Dial short code *123#");
+        } else {
+            alert("UNKNOWN APPLICATION");
+        }
     }
 });
