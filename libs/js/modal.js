@@ -5,6 +5,8 @@ $(document).ready(function () {
     let id = EMPTY;
     let APPLICATION_URL = "http://localhost:8000/ussd/agrigo";
     let HTTP_METHOD = "GET";
+    let PHONE_NUMBER = "250788313531";
+    let CELL_ID = "3G2343";
 
 
     let documentBody = $(document);
@@ -21,13 +23,17 @@ $(document).ready(function () {
      * Handle KeyBoard navigation
      */
     documentBody.keypress(function (event) {
-        let keyCode = (event.keyCode ? event.keyCode : event.which);
-        if (keyCode === 8) {
-            content.empty();
-        } else if (keyCode === 13) {
-            showModal();
-        } else {
-            content.append(getKeyBoardInput(event.keyCode));
+        let popupClass = document.getElementsByClassName('modal')[0];
+        // Handle keyboard input when modal is not shown
+        if (!popupClass.classList.contains('modal--show')) {
+            let keyCode = (event.keyCode ? event.keyCode : event.which);
+            if (keyCode === 8) {
+                content.empty();
+            } else if (keyCode === 13) {
+                showModal();
+            } else {
+                content.append(getKeyBoardInput(event.keyCode));
+            }
         }
     });
 
@@ -118,6 +124,8 @@ $(document).ready(function () {
             if (modalClass.classList.contains('modal--show')) {
                 if (e.keyCode === 27) {
                     closeModal();
+                } else if (e.keyCode === 13) {
+                    clickSendBtn();
                 } else {
                     console.log(e.keyCode);
                 }
@@ -264,21 +272,26 @@ $(document).ready(function () {
      */
     sendBtn.on("click", function (e) {
         e.preventDefault();
+        clickSendBtn();
+    });
+
+    function clickSendBtn() {
+        let modalWindow = document.getElementsByClassName('modal')[0];
         let newRequest = setNewRequest(input.val());
         let sessionid = setSessionId();
         let data = {
-            cellid: "3G2343",
+            cellid: CELL_ID,
             sessionid: String(sessionid),
             newRequest: String(newRequest),
             input: String(input.val()),
-            msisdn: "250784070610"
+            msisdn: PHONE_NUMBER
         };
-        if (input.val() === EMPTY) {
+        if (input.val() === EMPTY && modalWindow.classList.contains('modal--show')) {
             alert("Cannot submit empty field");
         } else {
             sendUssdRequest(data);
         }
-    });
+    }
 
     /**
      * onClick Cancel button reset ussd simulator
@@ -381,11 +394,11 @@ $(document).ready(function () {
             let newRequest = setNewRequest(userKeyboardInput);
             let sessionId = setSessionId();
             let data = {
-                cellid: "3G2343",
+                cellid: CELL_ID,
                 sessionid: String(sessionId),
                 newRequest: newRequest,
                 input: userKeyboardInput,
-                msisdn: "250788313531"
+                msisdn: PHONE_NUMBER
             };
             sendUssdRequest(data);
             modalClass.classList.add('modal--show');
