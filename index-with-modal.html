@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>USSD Simulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="assets/icon.png" type="image/png" sizes="32x32">
+    <link rel="stylesheet" href="libs/css/form-modal.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+</head>
+<body>
+<!-- Modal Overlay -->
+<div class="modal-overlay" id="modal-overlay"></div>
+<!-- The Modal -->
+<div id="shortCodeInfoModal" class="modal">
+    <div class="modal-guts">
+        <div class="form-style-8">
+            <h2>Short code information</h2>
+            <form id="shortCodeInformationForm" class="form-container">
+                <input type="text" id="userPhoneNumber" placeholder="Enter user phone number"
+                       name="userPhoneNumber" required>
+                <input type="text" id="shortCode" placeholder="USSD code *123# ..." name="shortCode" required>
+                <input type="url" id="backendUrl" placeholder="Enter backend url " name="backendUrl" required>
+                <input type="submit" id="submitButton" value="Submit"/>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript" src="libs/js/jquery.min.js"></script>
+<script type="text/javascript" src="libs/js/form-modal.js"></script>
+</body>
+</html>
+
