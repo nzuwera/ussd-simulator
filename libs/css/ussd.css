@@ -1,9 +1,29 @@
-body, html {
-    background: #000;
+html,
+body {
     height: 100%;
-    width: 100%;
+    background: #000;
+    color: #fff;
     font-family: 'Roboto', sans-serif;
 }
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100vw;
+    align-content: center;
+}
+
 .ussd-container {
     display: flex;
     justify-content: center;
@@ -11,20 +31,33 @@ body, html {
     flex-direction: column;
     margin: auto;
 }
+
 .screen {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     width: 360px;
-    height: 240px;
     background-color: #0063cf;
+    height: calc(100vh * 0.4);
+    justify-content: space-between;
 }
+
+.screen .status-bar {
+    width: 100%;
+}
+
+
+.status-bar img {
+    width: 100%;
+}
+
 .screen .logo-bar {
-    padding: 30px 98px 0 98px;
+    align-self: center;
 }
+
 .screen .content-bar {
-    padding: 110px 20px 20px;
+    padding: 3%;
 }
+
 .content-bar {
     display: flex;
     flex-direction: row;
@@ -32,23 +65,27 @@ body, html {
     align-items: center;
 
 }
+
 .content {
     font-weight: 300;
     color: white;
     font-size: 36px;
     color: #ffffff;
 }
+
 .pad {
     width: 360px;
-    height: 406px;
+    height: calc(100vh * 0.6);
     background-color: #fafafa;
     position: relative;
 }
+
 .numeric-pad {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin: 10px 0 0 50px;
+    /* margin: 10px 0 0 50px; */
+    justify-content: center
 }
 
 .item {
@@ -56,28 +93,38 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 88px;
+    justify-content: center;
+    width: 30%;
+    height: calc(100vh /8.5);
     font-size: 36px;
     font-weight: 300;
-    color: #3e3e3e;    
+    color: #3e3e3e;
     opacity: 0.6;
-    padding: 20px 24px 0 24px;
+    padding: 0;
+    margin: 2px;
+    /* padding-top: 1vh;
+    padding-bottom: 1vh; */
 }
+
 .item:hover {
     opacity: 1;
-    color: #fafafa; 
+    color: #fafafa;
     background-color: #3e3e3e;
 }
+
 .item-subtitle {
     font-size: 12px;
     color: #b9b9b9 !important;
 }
 
 .dial-button {
-    position: absolute;
-    bottom: 10px;
-    left: 145px;
+    text-align: center;
 }
+
+.dial-button img {
+    height: calc(100vh/12);
+}
+
 .buttons-wrapper {
     display: flex;
     flex-direction: row;
@@ -85,6 +132,7 @@ body, html {
     bottom: 10px;
     right: 20px;
 }
+
 .input-wrapper {
     position: absolute;
     bottom: 10px;
@@ -96,4 +144,44 @@ body, html {
     font-weight: 500;
     letter-spacing: 0.5px;
     color: #0063cf;
+}
+
+
+@media (max-width: 767px) {
+    .ussd-container {
+        width: 100vw;
+    }
+
+    .screen,
+    .pad {
+        width: 100%;
+    }
+
+}
+
+@media only screen and (device-width : 375px) and (device-height : 812px) and (-webkit-device-pixel-ratio : 3) {
+    .screen {
+        height: calc(100vh / 2.7);
+    }
+
+    .pad {
+        height: calc(100vh / 1.6)
+    }
+}
+
+@media (min-width: 768px) {
+
+    .screen,
+    .pad {
+        width: calc(100vw * 0.6);
+    }
+}
+
+@media (min-width: 992px) {
+
+    .screen,
+    .pad {
+        width: 360px;
+        ;
+    }
 }

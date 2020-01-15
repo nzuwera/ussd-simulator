@@ -1,41 +1,39 @@
-@import 'https://fonts.googleapis.com/css?family=Prompt:400,700';
-
-.modal {
-    /* This way it could be display flex or grid or whatever also. */
-    display: block;
-
-    /* Probably need media queries here */
-    width: 600px;
-    max-width: 100%;
-
-    height: 400px;
-    max-height: 100%;
-
-    position: fixed;
-
-    z-index: 100;
-
-    left: 50%;
-    top: 50%;
-
-    /* Use this for centering if unknown width/height */
-    transform: translate(-50%, -50%);
-
-    /* If known, negative margins are probably better (less chance of blurry text). */
-    /* margin: -200px 0 0 -200px; */
-
-    background: white;
-    box-shadow: 0 0 60px 10px rgba(0, 0, 0, 0.9);
-}
-
-.closed {
+.env_form_container {
     display: none;
 }
 
-.modal-overlay {
+
+.env_form {
+    /* This way it could be display flex or grid or whatever also. */
+    align-self: flex-end;
+    justify-self: flex-end;
+    display: block;
+    width: 600px;
+    height: 400px;
+    background: white;
+    box-shadow: 0 0 60px 10px rgba(0, 0, 0, 0.9);
+    align-self: center;
+}
+
+.closed {
+    display: block;
+}
+
+.close_btn {
+    position: absolute;
+    padding: 5px;
+    top: 15%;
+    right: 20%;
+    cursor: pointer;
+}
+
+.close_btn img {
+    height: 20px;
+    margin: 15px;
+}
+
+.env_form-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     z-index: 50;
@@ -43,12 +41,8 @@
     background: rgba(0, 0, 0, 0.6);
 }
 
-.modal-guts {
-    position: fixed;
-    top: 0;
-    left: 0;
+.env_form-guts {
     width: 100%;
-    /*height: 100%;*/
     overflow: auto;
     padding: 20px 50px 20px 20px;
 }
@@ -68,7 +62,8 @@ ul {
     margin: 10px 0 10px 30px;
 }
 
-li, p {
+li,
+p {
     margin: 0 0 10px 0;
 }
 
@@ -76,10 +71,10 @@ h1 {
     margin: 0 0 20px 0;
 }
 
-.modal .close-button {
+.env_form .close-button {
     position: absolute;
 
-    /* don't need to go crazy with z-index here, just sits over .modal-guts */
+    /* don't need to go crazy with z-index here, just sits over .env_form-guts */
     z-index: 1;
 
     top: 10px;
@@ -108,7 +103,7 @@ h1 {
 }
 
 /* ================== FORM CONTAINER STYLING ================== */
-.form-style-8{
+.form-style-8 {
     font-family: 'Open Sans Condensed', arial, sans;
     width: 500px;
     padding: 30px;
@@ -119,7 +114,8 @@ h1 {
     /*-webkit-box-shadow:  0px 0px 15px rgba(0, 0, 0, 0.22);*/
 
 }
-.form-style-8 h2{
+
+.form-style-8 h2 {
     text-align: center;
     background: #0063cf;
     text-transform: uppercase;
@@ -130,9 +126,9 @@ h1 {
     padding: 20px;
     margin: -30px -30px 30px -30px;
 }
+
 .form-style-8 input[type="text"],
-.form-style-8 input[type="url"]
-{
+.form-style-8 input[type="url"] {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -147,8 +143,10 @@ h1 {
     font: 16px Arial, Helvetica, sans-serif;
     height: 45px;
 }
+
 .form-style-8 input[type="button"],
-.form-style-8 input[type="submit"]{
+.form-style-8 input[type="submit"],
+.form-style-8 input[type="reset"] {
     -moz-box-shadow: inset 0px 1px 0px 0px #45D6D6;
     -webkit-box-shadow: inset 0px 1px 0px 0px #45D6D6;
     box-shadow: inset 0px 1px 0px 0px #45D6D6;
@@ -165,6 +163,23 @@ h1 {
     height: 45px;
     width: 100%;
 }
+
 .form-style-8 input[type="submit"]:hover {
-    background-color:#34CACA;
+    background-color: #34CACA;
+}
+
+input#resetButton {
+    -moz-box-shadow: inset 0px 1px 0px 0px #FFF;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #FFF;
+    border: none;
+    background: #fff !important;
+    margin-top: 15px;
+    border: #ccc solid 1px;
+    color: #34CACA;
+}
+
+@media (min-width: 1025px) {
+    .env_form_container {
+        display: block
+    }
 }
